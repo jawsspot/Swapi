@@ -22,17 +22,20 @@ window.onload = function () {
       if(categoryInput.dataset.type == 'people'){
         starship.classList.remove('open_data');
         planets.classList.remove('open_data');
+        category.classList.toggle('open');
+        if(person.classList.contains('open_data') == false){
         person.classList.toggle('open_data');
-        
+        }
       }else if (categoryInput.dataset.type == 'starships'){
         person.classList.remove('open_data');
         planets.classList.remove('open_data');
         starship.classList.toggle('open_data');
-        
+        category.classList.toggle('open');
       }else if(categoryInput.dataset.type == 'planets'){
         person.classList.remove('open_data');
         starship.classList.remove('open_data');
         planets.classList.toggle('open_data'); 
+        category.classList.toggle('open');
       } 
     }else {
       category.classList.remove('open_li');
@@ -115,8 +118,17 @@ window.onload = function () {
         return;
       }else{
         
-        var url = api + "people/?search="; // добавляем к запросу тип необходимых данных подробно о формате https://swapi.dev/documentation
-        url += event.target.innerText; // значение переменной запроса search
+        var url;
+		    if(categoryInput.dataset.type == 'planets'){
+		      url = api + "planets/?search=";
+		      url += event.target.innerText;
+		    }else if (categoryInput.dataset.type == 'starships'){
+		      url = api + "starships/?search=";
+          url += event.target.innerText;
+		    }else {
+		      var url = api + "people/?search="; // добавляем к запросу тип необходимых данных подробно о формате https://swapi.dev/documentation
+		      url += event.target.innerText; // значение переменной запроса search
+		    } // значение переменной запроса search
     
       // Создаем объект XMLHttpRequest, при помощи которого будем отправлять запрос
        var request = new XMLHttpRequest();
@@ -144,7 +156,7 @@ window.onload = function () {
           document.querySelector('#population').textContent = response.results[0]['population'];
           document.querySelector('#planets_films_count').textContent = response.results[0]['films'].length;
         }else if (categoryInput.dataset.type == 'starships'){
-          document.querySelector('#starship_name').textContent = response.results[0]['name'];
+          document.querySelector('#starship_name').textContent = response.results[0]['model'];
           document.querySelector('#length').textContent = response.results[0]['length'];
           document.querySelector('#max_atmosphering_speed').textContent = response.results[0]['max_atmosphering_speed'];
           document.querySelector('#cost_in_credits').textContent = response.results[0]['cost_in_credits'];
